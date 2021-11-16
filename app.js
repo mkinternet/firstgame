@@ -166,19 +166,24 @@ var game = new Phaser.Game(config);
 		}
 
 		if(cursors.space.isDown){
-		//	console.log('spacja');
-		//	var fireball = this.phisics.create(0,0,'fireball');
-		//	var fireball = this.add.follower(null, 50, 350, 'fireball');
-			//var fireball = fireballs.create(0, 0, 'fireball');	
-fireball = this.add.follower(null, 50, 350, 'fireball');			
-			fireball.setPosition(player.x, player.y);
 
-		
-		    curve = new Phaser.Curves.Line(new Phaser.Math.Vector2(player.x, player.y), new Phaser.Math.Vector2(player.x+800, player.y));
+			 //if (fireballs.countActive(true) === 0)
+			 {
+				var fireball = fireballs.create(0, 0, 'fireball');	
+				fireball.setPosition(player.x, player.y);
+			
+				
+				if (cursors.left.isDown){
+					fireball.setVelocity(-800, -20);
+				}
 
-			fireball.setPath(curve);
-			fireball.startFollow(300);
-		
+
+				if (cursors.right.isDown){
+					fireball.setVelocity(800, -20);
+				}
+
+
+			 }
 		
 		}
 	
@@ -231,6 +236,8 @@ function hitBomb (player, bomb)
 
 function hitFireballs(fireballs, bomb)
 {
+	console.log('uderzylem');
+	
 	bomb.disableBody(true, true);
 }
 
