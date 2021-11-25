@@ -16,6 +16,7 @@ class sceneA extends Phaser.Scene {
 		this.stars = [];
 		this.bombs = [];
 		this.fireballs = [];		
+		this.movingplatform = [];
     }	
 	
 	
@@ -24,6 +25,7 @@ class sceneA extends Phaser.Scene {
 	
 		this.load.image('sky', 'assets/img/sky.png');
 		this.load.image('ground', 'assets/img/platform.png');
+		this.load.image('groundgreen', 'assets/img/ground.png');
 		this.load.image('star', 'assets/img/star.png');
 		this.load.image('bomb', 'assets/img/bomb.png');
 		this.load.image('fireball', 'assets/img/fireball.png');
@@ -52,6 +54,19 @@ class sceneA extends Phaser.Scene {
 		scoreText = this.add.text(16, 16, 'score: 0 level: 1', { fontSize: '32px', fill: '#000' });
 		//endgametext = 
 		
+	/*	
+		var bricks = this.physics.add.staticGroup({
+  key: 'groundgreen',
+  repeat: 9,
+  setXY: {
+    x: 80,
+    y: 140,
+    stepX: 30
+  }
+});*/
+
+		//bricks.enableBody = true;
+		
 		
 		//elementy statyczne, ktore sie nie przemieszczaja
 		platforms = this.physics.add.staticGroup();
@@ -60,10 +75,28 @@ class sceneA extends Phaser.Scene {
 		//refreshBody() - odswierzenie po przeskalowaniu
 		platforms.create(400, 568, 'ground').setScale(2).refreshBody();
 
-		platforms.create(600, 400, 'ground');
+	//	platforms.create(600, 400, 'ground');
 		platforms.create(50, 250, 'ground');
-		platforms.create(750, 220, 'ground');		
-		
+		platforms.create(750, 220, 'groundgreen');		
+	
+	/*
+	platforms.create({
+  key: 'groundgreen',
+  repeat: 9,
+  setXY: {
+    x: 80,
+    y: 140,
+    stepX: 30
+  }
+});		
+*/
+
+    this.movingplatform = this.physics.add.image(400, 400, 'ground');
+
+    this.movingplatform.setImmovable(true);
+    this.movingplatform.body.allowGravity = false;
+    this.movingplatform.setVelocityX(50);
+
 		
 		//postac
 		 this.player = this.physics.add.sprite(100, 450, 'dude');
@@ -113,12 +146,19 @@ class sceneA extends Phaser.Scene {
 		
 		// definicja kolizji
 		this.physics.add.collider(this.player, platforms);
+		this.physics.add.collider(this.player, this.movingplatform);
+		this.physics.add.collider(this.player, this.bombs, hitBomb, null, this);
+
+	//	this.physics.add.collider(this.player, bricks);
+		
 		this.physics.add.collider(this.stars, platforms);
+		this.physics.add.collider(this.stars, this.movingplatform);
+	//	this.physics.add.collider(this.stars, bricks);
 //		this.physics.add.collider(stars, this.player);
 this
 		this.physics.add.collider(this.bombs, platforms);
+		this.physics.add.collider(this.bombs, this.movingplatform);
 
-		this.physics.add.collider(this.player, this.bombs, hitBomb, null, this);
 		this.physics.add.collider(this.fireballs, this.bombs, hitFireballs, null, this);
 
 	
@@ -178,7 +218,17 @@ this
 			 }
 		
 		}
-	
+		
+		
+		if (this.movingplatform.x >= 500)
+		{
+			this.movingplatform.setVelocityX(-50);
+		}
+		else if (this.movingplatform.x <= 300)
+		{
+			this.movingplatform.setVelocityX(50);
+		}
+		
     }	
 	
 }
