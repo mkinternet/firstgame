@@ -77,7 +77,7 @@ class sceneA extends Phaser.Scene {
 
 	//	platforms.create(600, 400, 'ground');
 		platforms.create(50, 250, 'ground');
-		platforms.create(750, 220, 'groundgreen');		
+		platforms.create(750, 220, 'ground');		
 	
 	/*
 	platforms.create({
@@ -299,6 +299,8 @@ function hitBomb (player, bomb)
 	
 
     gameOver = true;
+	
+	
 }
 
 
